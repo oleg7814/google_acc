@@ -1,4 +1,8 @@
+Groups = new Mongo.Collection('groups');
+
 if (Meteor.isClient) {
+  Meteor.subscribe('groups');
+
   Template.body.helpers({
     firstName: function(){
       var user = Meteor.user();
@@ -12,6 +16,9 @@ if (Meteor.isClient) {
       if (user) {
         return user.services.google.picture;
       }
+    },
+    groups: function () {
+      return Groups.find({},{sort:{createdAt: -1}})
     }
   });
 
@@ -37,6 +44,13 @@ if (Meteor.isClient) {
 
 
 if (Meteor.isServer) {
+  Meteor.publish('groups', function() {
+    return Groups.find({
+      owner: this.userId
+    })
+  })
+
+
   Meteor.startup(function () {
     // code to run on server at startup
   });
