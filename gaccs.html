@@ -5,5 +5,25 @@
 <body>
 <h1>Google Accounts</h1>
     {{> loginButtons}}
+
+
+{{#if currentUser}}
+    <p><img src="{{profileURL}}" width=30>
+        Hello, {{firstName}}!</p>
+{{/if}}
+
+<template name="allUsers">
+    <div id="allUsers">
+        <h4>All app users</h4>
+        <ul>
+            {{#each users}}
+                <li><img src="{{photoURL}}" width=50> <span>{{username}}</span></li>
+            {{/each}}
+
+        </ul>
+    </div>
+</template>
+
+
 </body>
 

@@ -1,20 +1,40 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
+  Template.body.helpers({
+    firstName: function(){
+      var user = Meteor.user();
+      if (user) {
+        return user.services.google.given_name;
+      }
+    },
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get('counter');
+    profileURL: function() {
+      var user = Meteor.user();
+      if (user) {
+        return user.services.google.picture;
+      }
     }
   });
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
+  Template.allUsers.helpers({
+
+    users: function(){
+      return Meteor.users.find({}, {"services.google.name": 1,
+        "services.google.picture": 1,
+        "services.google.email" : 1});
+    },
+
+    username: function(){
+      return this.services.google.name;
+    },
+
+    photoURL: function(){
+      return this.services.google.picture;
     }
-  });
+  })
+
+
 }
+
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
